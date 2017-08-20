@@ -1,0 +1,21 @@
+.item {
+  list-style: none;
+
+  & > *+* {
+    margin-top: 20px;
+  }
+}
+
+.header {
+  font-size: 18px;
+  margin: 0;
+
+  & > *+* {
+    margin-left: 10px;
+  }
+}
+
+.input {
+  display: inline-block;
+  vertical-align: middle;
+}

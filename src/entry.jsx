@@ -1,9 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import App from './components/main';
+import App from './app/components/main';
 
 ReactDOM.render(
-  <App/>,
+  <MuiThemeProvider>
+    <App/>
+  </MuiThemeProvider>,
   document.querySelector('#root')
 );

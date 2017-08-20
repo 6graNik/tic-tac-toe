@@ -12,9 +12,11 @@
   "author": "Tigran Kaginyan",
   "license": "MIT",
   "dependencies": {
+    "classnames": "^2.2.5",
     "css-loader": "0.26.1",
     "express": "^4.15.4",
     "lodash": "^4.17.4",
+    "material-ui": "^0.19.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "webpack": "^2.5.1"
