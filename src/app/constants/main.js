@@ -1,8 +1,8 @@
 export function getCells() {
   const cells = [];
 
-  for (let x = 0; x < 3; x++) {
-    for (let y = 0; y < 3; y++) {
+  for (let y = 0; y < 3; y++) {
+    for (let x = 0; x < 3; x++) {
       cells.push({
         x,
         y,
@@ -16,5 +16,9 @@ export function getCells() {
 };
 
 
-export const VALUE_NOUGHT = 'Noight';
-export const VALUE_CROSS = 'Cross';
+export const VALUE_NOUGHT = 'noight';
+export const VALUE_CROSS = 'cross';
+
+export const ROLE_PLAYER_ONE = 'playerOne';
+export const ROLE_PLAYER_TWO = 'playerTwo';
+export const ROLE_PLAYER_PC = 'computer';

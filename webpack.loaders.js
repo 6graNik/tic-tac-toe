@@ -5,10 +5,6 @@ module.exports = [
     test: /\.jsx?$/,
     loader: 'babel-loader',
     exclude: /node_modules/,
-    query: {
-      cacheDirectory: false,
-      presets: ['react', 'es2015']
-    }
   },
   {
     test: /\.css$/,

@@ -12,6 +12,7 @@ import styles from './styles.css';
 export default function Settings(props) {
   const {
     cells,
+    handleCellClick,
   } = props;
 
   return (
@@ -23,7 +24,13 @@ export default function Settings(props) {
           [styles.cross]: value === VALUE_CROSS,
         });
 
-        return <div className={className} key={index} />
+        const handleClick = () => handleCellClick(index);
+
+        return <div
+          onClick={handleClick}
+          className={className}
+          key={index}
+          />
       })}
     </section>
   );
