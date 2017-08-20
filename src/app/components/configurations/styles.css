@@ -27,13 +27,3 @@
     margin-left: 20px;
   }
 }
-
-.figuresConfig {
-  & > *+* {
-    margin-left: 10px;
-  }
-}
-
-.unactive {
-  color: #ccc;
-}

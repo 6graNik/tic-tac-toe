@@ -5,6 +5,8 @@ import Configurations from '../configurations';
 import GameField from '../game-field';
 import GameSettings from '../game-settings';
 
+import computerStrategy, {checkWin} from './utils/computer-strategies.js';
+
 import {
   getCells,
   // rolse
@@ -46,7 +48,9 @@ export default class NoughtsCrosses extends Component {
       warning,
       twoPlayerMode,
       gameStart,
-      activePlayer
+      activePlayer,
+      gameFinish,
+      moves
     } = this.state;
 
     return (
@@ -57,13 +61,8 @@ export default class NoughtsCrosses extends Component {
           </section>
           <section className={styles.configurations}>
             <Configurations
-              gameStart={gameStart}
               handleStartGame={this.handleStartGame}
-              twoPlayerMode={twoPlayerMode}
-              playerOne={this.state[ROLE_PLAYER_ONE]}
-              playerTwo={this.state[ROLE_PLAYER_TWO]}
-              computer={this.state[ROLE_PLAYER_PC]}
-              activePlayer={activePlayer}
+              gameStart={gameStart}
             />
             {warning && <span className={styles.warning}>{warning}</span>}
           </section>
@@ -72,9 +71,19 @@ export default class NoughtsCrosses extends Component {
               cells={CELLS}
               handleCellClick={this.handleCellClick}
              />
-            <GameSettings />
+            <GameSettings
+              gameStart={gameStart}
+              handleUndoMove={this.handleUndoMove}
+              twoPlayerMode={twoPlayerMode}
+              playerOne={this.state[ROLE_PLAYER_ONE]}
+              playerTwo={this.state[ROLE_PLAYER_TWO]}
+              computer={this.state[ROLE_PLAYER_PC]}
+              activePlayer={activePlayer}
+              moves={moves.length}
+            />
           </section>
         </main>
+        {gameFinish && <span>Game Over</span>}
       </section>
     );
   }
@@ -126,18 +135,26 @@ export default class NoughtsCrosses extends Component {
   }
 
   handleComputerMove = () => {
+    const {
+      cells,
+    } = this.state;
+
+    const index = computerStrategy(cells, this.state[ROLE_PLAYER_PC], this.state[ROLE_PLAYER_ONE]);
+
+    this.handleCellSetValue(index);
     this.handleChangeMove();
   }
 
   handleCellClick = (index) => {
     const {
-      gameStart,
       cells,
+      gameStart,
+      gameFinish,
       activePlayer,
     } = this.state;
 
     // user cant interact with board before game started
-    if (!gameStart) {
+    if (!gameStart || gameFinish) {
       return this.handleWarnUsers();
     }
 
@@ -158,11 +175,16 @@ export default class NoughtsCrosses extends Component {
 
     // change clicked cell value
     cells[index].value = this.state[activePlayer];
+    this.state.moves.push({
+      ...this.state,
+      cells: [...cells],
+    });
 
     this.setState({
       cells: [
         ...cells,
-      ]
+      ],
+      moves: [...this.state.moves],
     })
   }
 
@@ -170,12 +192,40 @@ export default class NoughtsCrosses extends Component {
     const {
       players,
       activePlayer,
+      cells,
     } = this.state;
+
+    const win = checkWin(cells, this.state[ROLE_PLAYER_ONE], this.state[ROLE_PLAYER_PC] || this.state[ROLE_PLAYER_TWO]);
+
+    if (win) {
+      return this.handleGameFinish();
+    }
 
     const nextActivePlayer = players.find((player) => player !== activePlayer);
 
     this.setState({
       activePlayer: nextActivePlayer,
+    }, () => {
+      if (this.state.activePlayer === ROLE_PLAYER_PC) {
+        setTimeout(() => this.handleComputerMove(), 800);
+      }
+    });
+  }
+
+  handleGameFinish = () => {
+    this.setState({
+      gameStart: true,
+      gameFinish: true,
+    });
+  }
+
+  handleUndoMove = () => {
+    const {
+      moves,
+    } = this.state;
+
+    this.setState({
+      ...moves[0],
     });
   }
 }

@@ -1,3 +1,23 @@
 .settings {
   flex: 1;
 }
+
+.gameSettings {
+  & > *+* {
+    margin-top: 20px;
+  }
+}
+
+.unactive {
+  color: #ccc;
+}
+
+.figuresConfig {
+  & > *+* {
+    margin-top: 10px;
+  }
+}
+
+.bold {
+  font-weight: 500;
+}
