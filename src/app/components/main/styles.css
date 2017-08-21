@@ -10,12 +10,13 @@
 .root {
   font-size: 16px;
   margin: 0 auto;
-  width: 998px;
+  max-width: 650px;
+  width: 100%;
   padding: 10px;
 }
 
 .inner > *+* {
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 .head {
@@ -30,6 +31,6 @@
   display: flex;
 
   & > *+* {
-    margin-left: 20px;
+    margin-left: 40px;
   }
 }

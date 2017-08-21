@@ -28,11 +28,40 @@ export default function GameSettings(props) {
       <Button onClick={handleUndoMove} label="Undo last step" disabled={!gameStart}/>
       <div className={cx(styles.figuresConfig, {[styles.unactive]: !gameStart})}>
         {gameStart && <div className={styles.bold}>Current Move: {activePlayer};</div>}
-        <div>Player One: {playerOne || 'not configurate'};</div>
-        <div>{twoPlayerMode && `Player Two: ${playerTwo || 'not configurate'};`}</div>
-        <div>{!twoPlayerMode && `Computer: ${computer || 'not configurate'};`}</div>
+        <div>
+          Player One:
+          <Figure value={playerOne}/>
+        </div>
+        {twoPlayerMode ? (
+          <div>
+            Player Two:
+            <Figure value={playerTwo}/>
+          </div>
+        ) : (
+          <div>
+            Computer:
+            <Figure value={computer}/>
+          </div>
+        )}
+
         <div>Total moves: {moves}</div>
       </div>
     </section>
   );
+}
+
+function Figure({value}) {
+  switch (value) {
+    case VALUE_NOUGHT: {
+      return <div className={cx(styles.figure, styles.nought)}></div>;
+    }
+
+    case VALUE_CROSS: {
+      return <div className={cx(styles.figure, styles.cross)}></div>
+    }
+
+    default: {
+      return <span />;
+    }
+  }
 }

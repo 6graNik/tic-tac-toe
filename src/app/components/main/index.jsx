@@ -45,6 +45,7 @@ export default class NoughtsCrosses extends Component {
       defaultFieldSize,
       userFieldSize,
       cells,
+      showRefresh
     } = this.state;
 
     return (
@@ -69,6 +70,7 @@ export default class NoughtsCrosses extends Component {
               cells={cells}
               handleCellClick={this.handleCellClick}
               fieldSize={userFieldSize || defaultFieldSize}
+              showRefresh={showRefresh}
              />
             <GameSettings
               gameStart={gameStart}
@@ -100,6 +102,8 @@ export default class NoughtsCrosses extends Component {
       userFieldSize,
     } = this.state;
 
+    this.handleToggleRefresh();
+
     let players = [];
 
     if (twoPlayerMode) {
@@ -121,19 +125,23 @@ export default class NoughtsCrosses extends Component {
     // the second one will be playing noughts
     const noughtsPlayerName = players.find((player) => player !== crossPlayerName);
 
-    this.setState({
-      gameStart: true,
-      [crossPlayerName]: VALUE_CROSS,
-      [noughtsPlayerName]: VALUE_NOUGHT,
-      activePlayer: crossPlayerName,
-      players,
-      warning: null,
-      userFieldSize: userFieldSize || defaultFieldSize
-    }, () => {
-      if (this.state.activePlayer === ROLE_PLAYER_PC) {
-        this.handleComputerMove();
-      }
-    });
+    setTimeout(() => {
+      this.setState({
+        gameStart: true,
+        [crossPlayerName]: VALUE_CROSS,
+        [noughtsPlayerName]: VALUE_NOUGHT,
+        activePlayer: crossPlayerName,
+        players,
+        warning: null,
+        userFieldSize: userFieldSize || defaultFieldSize
+      }, () => {
+        if (this.state.activePlayer === ROLE_PLAYER_PC) {
+          this.handleComputerMove();
+        }
+
+        this.handleToggleRefresh();
+      });
+    }, 500);
   }
 
 
@@ -145,12 +153,17 @@ export default class NoughtsCrosses extends Component {
   }
 
   handleRestartGame = () => {
-    this.setState({
-      ...defaultGameConfig,
-      cells: getCells(this.state.defaultFieldSize),
-    }, () => {
-      this.handleStartGame();
-    })
+    this.handleToggleRefresh();
+
+    setTimeout(() => {
+      this.setState({
+        ...defaultGameConfig,
+        cells: getCells(this.state.defaultFieldSize),
+      }, () => {
+        this.handleStartGame();
+        this.handleToggleRefresh();
+      })
+    }, 500)
   }
 
   handleComputerMove = () => {
@@ -244,6 +257,12 @@ export default class NoughtsCrosses extends Component {
 
     this.setState({
       ...moves[0],
+    });
+  }
+
+  handleToggleRefresh = () => {
+    this.setState({
+      showRefresh: !this.state.showRefresh
     });
   }
 

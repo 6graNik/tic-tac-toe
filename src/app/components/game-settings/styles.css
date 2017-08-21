@@ -14,10 +14,78 @@
 
 .figuresConfig {
   & > *+* {
-    margin-top: 10px;
+    margin-top: 20px;
   }
 }
 
 .bold {
   font-weight: 500;
+}
+
+.field {
+  flex: 3;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  max-width: 350px;
+  border: 1px solid #f2f2f2;
+
+  & > * {
+    background: #f2f2f2;
+  }
+
+  & > *:nth-child(even) {
+    background: #fff;
+  }
+}
+
+.figure {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background: whitesmoke;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.nought {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    border: 2px solid black;
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.cross {
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 18px;
+    width: 2px;
+    background: #000;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 18px;
+    width: 2px;
+    background: #000;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
 }
