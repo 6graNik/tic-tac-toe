@@ -45,6 +45,8 @@ function moveToWin(cells, value, userValue, winingAxelsByIndex, fieldSize) {
       }
     );
 
+    debugger;
+
     if (filteredAxel.length === fieldSize) {
       return cells[elementAxelIndex].i;
     }
@@ -56,7 +58,7 @@ function moveToWin(cells, value, userValue, winingAxelsByIndex, fieldSize) {
 // This strategy will defend completing axel by user
 // it's the same nove to win strategy by logic
 function userDefence(cells, value, userValue, winingAxelsByIndex, fieldSize) {
-  return moveToWin(cells, value, userValue, winingAxelsByIndex, fieldSize);
+  return moveToWin(cells, userValue, value, winingAxelsByIndex, fieldSize);
 }
 
 // This strategy trying to take position this covering most count of axels

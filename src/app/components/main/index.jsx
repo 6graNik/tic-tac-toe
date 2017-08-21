@@ -169,9 +169,15 @@ export default class NoughtsCrosses extends Component {
   handleComputerMove = () => {
     const {
       cells,
+      userFieldSize,
     } = this.state;
 
-    const index = computerStrategy(cells, this.state[ROLE_PLAYER_PC], this.state[ROLE_PLAYER_ONE]);
+    const index = computerStrategy(
+      cells,
+      this.state[ROLE_PLAYER_PC],
+      this.state[ROLE_PLAYER_ONE],
+      userFieldSize
+    );
 
     this.handleCellSetValue(index);
     this.handleChangeMove();

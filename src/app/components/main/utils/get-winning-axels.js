@@ -34,8 +34,8 @@ export default function getWinningAxel (side = 3) {
   }
 
   const horizontalAxelsArr = Object.keys(horizontalAxels).map((key) => horizontalAxels[key]);
-  const verticalAxelsArr = Object.keys(horizontalAxels).map((key) => horizontalAxels[key]);
-  const diagonalAxelsArr = Object.keys(horizontalAxels).map((key) => horizontalAxels[key]);
+  const verticalAxelsArr = Object.keys(verticalAxels).map((key) => verticalAxels[key]);
+  const diagonalAxelsArr = Object.keys(diagonalAxels).map((key) => diagonalAxels[key]);
 
   return [
     ...horizontalAxelsArr,
