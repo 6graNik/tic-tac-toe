@@ -19,6 +19,11 @@
   }
 }
 
+.headerSlider {
+  position: relative;
+  display: inline-block;
+}
+
 .input {
   display: inline-block;
   vertical-align: middle;
@@ -26,4 +31,12 @@
   & > *+* {
     margin-left: 20px;
   }
+}
+
+.inputSlider {
+  height: 20px;
+  top: -22px;
+  position: absolute;
+  left: 100%;
+  width: 200px;
 }

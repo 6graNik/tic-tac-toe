@@ -1,4 +1,4 @@
-import {winingAxelsByIndex} from '../../../constants/main.js'
+import getWinningAxel from './get-winning-axels.js';
 
 const strategies = [
   moveToWin,
@@ -9,10 +9,12 @@ const strategies = [
 
 const MINIMAL_MOVES_COUNT_FOR_WIN = 5;
 
-export default function computerStrategy(cells, value, userValue) {
+export default function computerStrategy(cells, value, userValue, fieldSize) {
+  const winingAxelsByIndex = getWinningAxel(fieldSize);
+
   for (let i = 0; i < strategies.length; i++) {
     // run all strategies by order
-    const index = strategies[i](cells, value, userValue);
+    const index = strategies[i](cells, value, userValue, winingAxelsByIndex);
 
     if (index || index === 0) {
       return index;
@@ -23,7 +25,7 @@ export default function computerStrategy(cells, value, userValue) {
 // This strategy applyable when computer can win by one move
 // iterate each cell by index in axel arr, compare its value and computer current figure
 // if in axel we left with one empty cell, then our strategy can be applyed
-function moveToWin(cells, value) {
+function moveToWin(cells, value, userValue, winingAxelsByIndex) {
   for (let i = 0; i < winingAxelsByIndex.length; i++) {
     const axel = winingAxelsByIndex[i];
     let elementAxelIndex = null;
@@ -53,8 +55,8 @@ function moveToWin(cells, value) {
 
 // This strategy will defend completing axel by user
 // it's the same nove to win strategy by logic
-function userDefence(cells, value, userValue) {
-  return moveToWin(cells, userValue);
+function userDefence(cells, value, userValue, fieldSize) {
+  return moveToWin(cells, value, userValue, fieldSize);
 }
 
 // This strategy trying to take position this covering most count of axels
@@ -90,7 +92,9 @@ function takeEmpty(cells) {
 }
 
 // This function just checks is there winner or not
-export function checkWin(cells, value, userValue) {
+export function checkWin(cells, value, userValue, fieldSize) {
+  const winingAxelsByIndex = getWinningAxel(fieldSize);
+
   const cellsThisValue = cells.filter((cell) => cell.value);
 
   // Min count of moves to win the game

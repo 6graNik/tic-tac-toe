@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
 import Button from 'material-ui/RaisedButton';
+import debounce from 'lodash/debounce';
 
 import Configurations from '../configurations';
 import GameField from '../game-field';
 import GameSettings from '../game-settings';
 
 import computerStrategy, {checkWin} from './utils/computer-strategies.js';
+import getWinningAxel from './utils/get-winning-axels.js';
+import getCells from './utils/get-cells.js';
 
 import {
-  getCells,
   // rolse
   ROLE_PLAYER_ONE,
   ROLE_PLAYER_TWO,
@@ -19,8 +21,6 @@ import {
 } from '../../constants/main.js';
 
 import styles from './styles.css';
-
-const CELLS = getCells();
 
 export default class NoughtsCrosses extends Component {
   state = {
@@ -35,12 +35,15 @@ export default class NoughtsCrosses extends Component {
     [ROLE_PLAYER_ONE]: null,
     [ROLE_PLAYER_TWO]: null,
     [ROLE_PLAYER_PC]: null,
+    //
+    defaultFieldSize: 3,
+    userFieldSize: null,
   }
 
   componentWillMount() {
     this.setState({
-      cells: CELLS,
-    })
+      cells: getCells(this.state.defaultFieldSize),
+    });
   }
 
   render() {
@@ -50,7 +53,10 @@ export default class NoughtsCrosses extends Component {
       gameStart,
       activePlayer,
       gameFinish,
-      moves
+      moves,
+      defaultFieldSize,
+      userFieldSize,
+      cells,
     } = this.state;
 
     return (
@@ -63,13 +69,17 @@ export default class NoughtsCrosses extends Component {
             <Configurations
               handleStartGame={this.handleStartGame}
               gameStart={gameStart}
+              defaultFieldSize={defaultFieldSize}
+              userFieldSize={userFieldSize}
+              handleChangeFieldSize={this.handleChangeFieldSize}
             />
             {warning && <span className={styles.warning}>{warning}</span>}
           </section>
           <section className={styles.gameContainer}>
             <GameField
-              cells={CELLS}
+              cells={cells}
               handleCellClick={this.handleCellClick}
+              fieldSize={userFieldSize || defaultFieldSize}
              />
             <GameSettings
               gameStart={gameStart}
@@ -96,7 +106,9 @@ export default class NoughtsCrosses extends Component {
 
   handleStartGame = () => {
     const {
-      twoPlayerMode
+      twoPlayerMode,
+      defaultFieldSize,
+      userFieldSize,
     } = this.state;
 
     let players = [];
@@ -127,10 +139,19 @@ export default class NoughtsCrosses extends Component {
       activePlayer: crossPlayerName,
       players,
       warning: null,
+      userFieldSize: userFieldSize || defaultFieldSize
     }, () => {
       if (this.state.activePlayer === ROLE_PLAYER_PC) {
         this.handleComputerMove();
       }
+    });
+  }
+
+
+  handleGameFinish = () => {
+    this.setState({
+      gameStart: true,
+      gameFinish: true,
     });
   }
 
@@ -193,9 +214,15 @@ export default class NoughtsCrosses extends Component {
       players,
       activePlayer,
       cells,
+      userFieldSize,
     } = this.state;
 
-    const win = checkWin(cells, this.state[ROLE_PLAYER_ONE], this.state[ROLE_PLAYER_PC] || this.state[ROLE_PLAYER_TWO]);
+    const win = checkWin(
+      cells,
+      this.state[ROLE_PLAYER_ONE],
+      this.state[ROLE_PLAYER_PC] || this.state[ROLE_PLAYER_TWO],
+      userFieldSize
+    );
 
     if (win) {
       return this.handleGameFinish();
@@ -212,13 +239,6 @@ export default class NoughtsCrosses extends Component {
     });
   }
 
-  handleGameFinish = () => {
-    this.setState({
-      gameStart: true,
-      gameFinish: true,
-    });
-  }
-
   handleUndoMove = () => {
     const {
       moves,
@@ -228,4 +248,11 @@ export default class NoughtsCrosses extends Component {
       ...moves[0],
     });
   }
+
+  handleChangeFieldSize = debounce((event, value) => {
+    this.setState({
+      userFieldSize: value,
+      cells: getCells(value),
+    });
+  }, 300)
 }

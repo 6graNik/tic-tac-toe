@@ -9,11 +9,16 @@ import {
 
 import styles from './styles.css';
 
-export default function Settings(props) {
+export default function GameField(props) {
   const {
     cells,
     handleCellClick,
+    fieldSize,
   } = props;
+
+  let y = 0;
+  let bg = ['#f2f2f2', '#fff'];
+  const evenSide = !(fieldSize % 2);
 
   return (
     <section className={styles.field}>
@@ -24,11 +29,26 @@ export default function Settings(props) {
           [styles.cross]: value === VALUE_CROSS,
         });
 
+        const cellPart = 100 / fieldSize;
+
+        if (evenSide && !(index % fieldSize)) {
+          y++;
+        }
+
+        const customBg = !Boolean((index + y) % 2) ? bg[0] : bg[1];
+
+        const cellStyle = {
+          flex: `0 0 ${cellPart}%`,
+          paddingBottom: `${cellPart}%`,
+          background: customBg,
+        };
+
         const handleClick = () => handleCellClick(index);
 
         return <div
           onClick={handleClick}
           className={className}
+          style={cellStyle}
           key={index}
           />
       })}

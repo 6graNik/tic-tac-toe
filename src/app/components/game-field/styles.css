@@ -16,8 +16,6 @@
 }
 
 .cell {
-  flex: 0 0 33.3%;
-  padding-bottom: 33.3%;
   position: relative;
 }
 
