@@ -1,9 +1,9 @@
 export const VALUE_NOUGHT = 'noight';
 export const VALUE_CROSS = 'cross';
 
-export const ROLE_PLAYER_ONE = 'playerOne';
-export const ROLE_PLAYER_TWO = 'playerTwo';
-export const ROLE_PLAYER_PC = 'computer';
+export const ROLE_PLAYER_ONE = 'Player One';
+export const ROLE_PLAYER_TWO = 'Player Two';
+export const ROLE_PLAYER_PC = 'Computer';
 
 export const defaultGameConfig = {
   cells: [],

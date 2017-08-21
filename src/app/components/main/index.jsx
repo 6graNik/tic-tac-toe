@@ -45,7 +45,8 @@ export default class NoughtsCrosses extends Component {
       defaultFieldSize,
       userFieldSize,
       cells,
-      showRefresh
+      showRefresh,
+      winner
     } = this.state;
 
     return (
@@ -63,7 +64,6 @@ export default class NoughtsCrosses extends Component {
               handleChangeFieldSize={this.handleChangeFieldSize}
               handleRestartGame={this.handleRestartGame}
             />
-            {warning && <span className={styles.warning}>{warning}</span>}
           </section>
           <section className={styles.gameContainer}>
             <GameField
@@ -71,10 +71,13 @@ export default class NoughtsCrosses extends Component {
               handleCellClick={this.handleCellClick}
               fieldSize={userFieldSize || defaultFieldSize}
               showRefresh={showRefresh}
+              gameStart={gameStart}
+              warning={warning}
+              gameFinish={gameFinish}
+              winner={winner}
              />
             <GameSettings
               gameStart={gameStart}
-              handleUndoMove={this.handleUndoMove}
               twoPlayerMode={twoPlayerMode}
               playerOne={this.state[ROLE_PLAYER_ONE]}
               playerTwo={this.state[ROLE_PLAYER_TWO]}
@@ -84,14 +87,13 @@ export default class NoughtsCrosses extends Component {
             />
           </section>
         </main>
-        {gameFinish && <span>Game Over</span>}
       </section>
     );
   }
 
   handleWarnUsers = () => {
     this.setState({
-      warning: 'Click "Start Game" button before making activePlayers!'
+      warning: 'Click "Start Game" button before making moves!'
     })
   }
 
@@ -145,10 +147,27 @@ export default class NoughtsCrosses extends Component {
   }
 
 
-  handleGameFinish = () => {
+  handleGameFinish = ({value}) => {
+    let winner;
+
+    switch (value) {
+      case this.state[ROLE_PLAYER_ONE]:
+        winner = ROLE_PLAYER_ONE;
+        break;
+      case this.state[ROLE_PLAYER_TWO]:
+        winner = ROLE_PLAYER_TWO;
+        break;
+      case this.state[ROLE_PLAYER_PC]:
+        winner = ROLE_PLAYER_PC;
+        break;
+      default:
+
+    }
+
     this.setState({
       gameStart: true,
       gameFinish: true,
+      winner,
     });
   }
 
@@ -158,6 +177,7 @@ export default class NoughtsCrosses extends Component {
     setTimeout(() => {
       this.setState({
         ...defaultGameConfig,
+        userFieldSize: this.state.userFieldSize,
         cells: getCells(this.state.defaultFieldSize),
       }, () => {
         this.handleStartGame();
@@ -211,11 +231,16 @@ export default class NoughtsCrosses extends Component {
       activePlayer,
     } = this.state;
 
+    const moves = this.state.moves.slice(0);
+
     // change clicked cell value
     cells[index].value = this.state[activePlayer];
+
     this.state.moves.push({
       ...this.state,
-      cells: [...cells],
+      cells: [
+        ...cells,
+      ],
     });
 
     this.setState({
@@ -232,6 +257,7 @@ export default class NoughtsCrosses extends Component {
       activePlayer,
       cells,
       userFieldSize,
+      moves,
     } = this.state;
 
     const win = checkWin(
@@ -241,8 +267,8 @@ export default class NoughtsCrosses extends Component {
       userFieldSize
     );
 
-    if (win) {
-      return this.handleGameFinish();
+    if (win || moves.length === cells.length) {
+      return this.handleGameFinish(win);
     }
 
     const nextActivePlayer = players.find((player) => player !== activePlayer);
@@ -253,16 +279,6 @@ export default class NoughtsCrosses extends Component {
       if (this.state.activePlayer === ROLE_PLAYER_PC) {
         setTimeout(() => this.handleComputerMove(), 800);
       }
-    });
-  }
-
-  handleUndoMove = () => {
-    const {
-      moves,
-    } = this.state;
-
-    this.setState({
-      ...moves[0],
     });
   }
 

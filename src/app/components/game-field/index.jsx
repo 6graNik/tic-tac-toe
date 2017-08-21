@@ -16,6 +16,10 @@ export default function GameField(props) {
     handleCellClick,
     fieldSize,
     showRefresh,
+    gameStart,
+    gameFinish,
+    winner,
+    warning,
   } = props;
 
   let y = 0;
@@ -28,8 +32,8 @@ export default function GameField(props) {
         {cells.map(({value}, index) => {
           const className = cx(styles.cell, {
             [styles.empty]: !value,
-            [styles.nought]: value === VALUE_NOUGHT,
-            [styles.cross]: value === VALUE_CROSS,
+            [styles.nought]: !showRefresh && value === VALUE_NOUGHT,
+            [styles.cross]: !showRefresh && value === VALUE_CROSS,
           });
 
           const cellPart = 100 / fieldSize;
@@ -59,7 +63,11 @@ export default function GameField(props) {
       {showRefresh && <div className={styles.refreshIndicator}>
         <RefreshIndicator status="loading" style={{position: 'static'}}/>
       </div>}
-      {showRefresh && <div className={styles.overlay} />}
+      {showRefresh || !gameStart || gameFinish && <div className={styles.overlay} />}
+      {gameFinish && <div className={styles.winner}>
+        {winner ? `Wins: ${winner}!` : 'Draw'}
+      </div>}
+      {warning && <div className={styles.warning}>{warning}</div>}
     </section>
   );
 }

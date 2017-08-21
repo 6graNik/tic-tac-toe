@@ -9,6 +9,7 @@
   flex-flow: row;
   flex-wrap: wrap;
   border: 1px solid #f2f2f2;
+  cursor: pointer;
 
   & > * {
     background: #f2f2f2;
@@ -82,4 +83,28 @@
   height: 100%;
   background: #B2EBF2;
   opacity: 0.6;
+}
+
+.warning {
+  position: absolute;
+  padding: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+  background: #fff;
+  border: 1px solid whitesmoke;
+  color: #B71C1C;
+}
+
+.winner {
+  position: absolute;
+  padding: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+  background: #fff;
+  border: 1px solid whitesmoke;
+  color: #000;
 }

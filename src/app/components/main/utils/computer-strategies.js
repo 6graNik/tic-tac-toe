@@ -45,8 +45,6 @@ function moveToWin(cells, value, userValue, winingAxelsByIndex, fieldSize) {
       }
     );
 
-    debugger;
-
     if (filteredAxel.length === fieldSize) {
       return cells[elementAxelIndex].i;
     }

@@ -2,8 +2,6 @@ import React from 'react';
 import Toggle from 'material-ui/Toggle';
 import cx from 'classnames';
 
-import Button from 'material-ui/RaisedButton';
-
 import {
   VALUE_NOUGHT,
   VALUE_CROSS,
@@ -19,13 +17,11 @@ export default function GameSettings(props) {
     computer,
     gameStart,
     activePlayer,
-    handleUndoMove,
     moves,
   } = props;
 
   return (
     <section className={styles.gameSettings}>
-      <Button onClick={handleUndoMove} label="Undo last step" disabled={!gameStart}/>
       <div className={cx(styles.figuresConfig, {[styles.unactive]: !gameStart})}>
         {gameStart && <div className={styles.bold}>Current Move: {activePlayer};</div>}
         <div>
@@ -43,7 +39,6 @@ export default function GameSettings(props) {
             <Figure value={computer}/>
           </div>
         )}
-
         <div>Total moves: {moves}</div>
       </div>
     </section>
