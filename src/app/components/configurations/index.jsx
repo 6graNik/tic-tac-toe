@@ -9,6 +9,7 @@ import styles from './styles.css';
 export default function Configurations(props) {
   const {
     handleStartGame,
+    handleRestartGame,
     defaultFieldSize,
     userFieldSize,
     handleChangeFieldSize,
@@ -45,8 +46,15 @@ export default function Configurations(props) {
           <Button
             label="Start Game"
             onClick={handleStartGame}
+            disabled={gameStart}
             primary
             />
+            <Button
+              label="Restart Game"
+              onClick={handleRestartGame}
+              disabled={!gameStart}
+              secondary
+              />
           <Button
             label="Continue Game"
             />

@@ -14,7 +14,7 @@ export default function computerStrategy(cells, value, userValue, fieldSize) {
 
   for (let i = 0; i < strategies.length; i++) {
     // run all strategies by order
-    const index = strategies[i](cells, value, userValue, winingAxelsByIndex);
+    const index = strategies[i](cells, value, userValue, winingAxelsByIndex, fieldSize);
 
     if (index || index === 0) {
       return index;
@@ -25,7 +25,7 @@ export default function computerStrategy(cells, value, userValue, fieldSize) {
 // This strategy applyable when computer can win by one move
 // iterate each cell by index in axel arr, compare its value and computer current figure
 // if in axel we left with one empty cell, then our strategy can be applyed
-function moveToWin(cells, value, userValue, winingAxelsByIndex) {
+function moveToWin(cells, value, userValue, winingAxelsByIndex, fieldSize) {
   for (let i = 0; i < winingAxelsByIndex.length; i++) {
     const axel = winingAxelsByIndex[i];
     let elementAxelIndex = null;
@@ -45,7 +45,7 @@ function moveToWin(cells, value, userValue, winingAxelsByIndex) {
       }
     );
 
-    if (filteredAxel.length === 3) {
+    if (filteredAxel.length === fieldSize) {
       return cells[elementAxelIndex].i;
     }
   }
@@ -55,14 +55,13 @@ function moveToWin(cells, value, userValue, winingAxelsByIndex) {
 
 // This strategy will defend completing axel by user
 // it's the same nove to win strategy by logic
-function userDefence(cells, value, userValue, fieldSize) {
-  return moveToWin(cells, value, userValue, fieldSize);
+function userDefence(cells, value, userValue, winingAxelsByIndex, fieldSize) {
+  return moveToWin(cells, value, userValue, winingAxelsByIndex, fieldSize);
 }
 
 // This strategy trying to take position this covering most count of axels
-function takeMostAxels(cells) {
+function takeMostAxels(cells, value, userValue, winingAxelsByIndex, fieldSize) {
   const center = Math.floor(cells.length / 2);
-  const boardSide = 3;
 
   if (!cells[center].value) {
     return center;
@@ -70,8 +69,8 @@ function takeMostAxels(cells) {
 
   const corners = [];
   corners[0] = cells[0];
-  corners[boardSide - 1] = cells[boardSide - 1];
-  corners[cells.length - boardSide] = cells[cells.length - boardSide];
+  corners[fieldSize - 1] = cells[fieldSize - 1];
+  corners[cells.length - fieldSize] = cells[cells.length - fieldSize];
   corners[cells.length - 1] = cells[cells.length - 1];
 
   const emptyCorners = corners.filter(({i: index}) => !cells[index].value);

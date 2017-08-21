@@ -18,26 +18,14 @@ import {
   // values
   VALUE_NOUGHT,
   VALUE_CROSS,
+  defaultGameConfig,
 } from '../../constants/main.js';
 
 import styles from './styles.css';
 
 export default class NoughtsCrosses extends Component {
   state = {
-    cells: [],
-    moves: [],
-    gameStart: false,
-    gameFinish: false,
-    twoPlayerMode: false,
-    activePlayer: null,
-    warning: null,
-    // here we will write which figure each one will have
-    [ROLE_PLAYER_ONE]: null,
-    [ROLE_PLAYER_TWO]: null,
-    [ROLE_PLAYER_PC]: null,
-    //
-    defaultFieldSize: 3,
-    userFieldSize: null,
+    ...defaultGameConfig,
   }
 
   componentWillMount() {
@@ -72,6 +60,7 @@ export default class NoughtsCrosses extends Component {
               defaultFieldSize={defaultFieldSize}
               userFieldSize={userFieldSize}
               handleChangeFieldSize={this.handleChangeFieldSize}
+              handleRestartGame={this.handleRestartGame}
             />
             {warning && <span className={styles.warning}>{warning}</span>}
           </section>
@@ -153,6 +142,15 @@ export default class NoughtsCrosses extends Component {
       gameStart: true,
       gameFinish: true,
     });
+  }
+
+  handleRestartGame = () => {
+    this.setState({
+      ...defaultGameConfig,
+      cells: getCells(this.state.defaultFieldSize),
+    }, () => {
+      this.handleStartGame();
+    })
   }
 
   handleComputerMove = () => {
