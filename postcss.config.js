@@ -1,26 +1,25 @@
-// import path from 'path';
-var autoprefixer = require('autoprefixer');
-var simplevars = require('postcss-simple-vars');
-var nesting = require('postcss-nested');
-var calc = require('postcss-calc');
-var colorFunction = require('postcss-color-function');
-var hexrgba = require('postcss-hexrgba');
-var propertyLookup = require('postcss-property-lookup');
-var reporter = require('postcss-reporter');
+const path = require('path');
+const autoprefixer = require('autoprefixer');
+const simplevars = require('postcss-simple-vars');
+const nesting = require('postcss-nested');
+const calc = require('postcss-calc');
+const colorFunction = require('postcss-color-function');
+const hexrgba = require('postcss-hexrgba');
+const propertyLookup = require('postcss-property-lookup');
+const postcssUtilities = require('postcss-utilities');
+const reporter = require('postcss-reporter');
 
-function config(pathPostcss) {
+module.exports = function (pathPostcss) {
   return [
     autoprefixer({
-      browsers: 'last 2 version, iOS >= 10, ie >= 11,',
+      browsers: 'last 2 version, iOS >= 8, ie >= 10',
     }),
+    postcssUtilities(),
     nesting({}),
     propertyLookup(),
-    simplevars({}),
     calc(),
     colorFunction(),
     hexrgba(),
     reporter(),
   ];
-}
-
-module.exports = config;
+};

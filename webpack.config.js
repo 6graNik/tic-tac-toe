@@ -4,6 +4,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var loaders = require('./webpack.loaders');
 var config = require('./src/configs/main');
+var postCssConfig = require('./postcss.config');
 
 var PATH_BUILD = path.join(__dirname, 'build');
 var NODE_ENV = process.env.NODE_ENV;
