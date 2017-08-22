@@ -24,7 +24,7 @@ export default function GameConfig(props) {
     <ul className={styles.root}>
       <li className={styles.item}>
         <h2 className={cx(styles.header, styles.headerSlider)}>
-          <span>Choose field size: {userFieldSize || defaultFieldSize}</span>
+          <span>Choose field size: {userFieldSize || defaultFieldSize}x{userFieldSize || defaultFieldSize}</span>
           <div className={cx(styles.input, styles.inputSlider)}>
             <Slider
               disabled={gameStart}
