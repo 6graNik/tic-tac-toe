@@ -43,6 +43,11 @@
     width: 40px;
     border-radius: 50%;
     transform: translate(-50%, -50%);
+
+    @media all and (max-width: 500px) {
+      height: 25px;
+      width: 25px;
+    }
   }
 }
 
@@ -57,6 +62,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-45deg);
+
+    @media all and (max-width: 500px) {
+      height: 30px;
+    }
   }
 
   &::after {
@@ -69,6 +78,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(45deg);
+
+    @media all and (max-width: 500px) {
+      height: 30px;
+    }
   }
 }
 

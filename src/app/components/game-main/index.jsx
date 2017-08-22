@@ -191,7 +191,7 @@ export default class NoughtsCrosses extends Component {
       this.setState({
         ...defaultGameConfig,
         userFieldSize: this.state.userFieldSize,
-        cells: getCells(this.state.defaultFieldSize),
+        cells: getCells(this.state.userFieldSize),
       }, () => {
         this.handleStartGame();
         this.handleToggleRefresh();
