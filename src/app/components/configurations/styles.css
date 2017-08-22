@@ -31,6 +31,17 @@
   & > *+* {
     margin-left: 20px;
   }
+
+  @media all and (max-width: 450px) {
+    text-align: center;
+    display: block;
+  }
+}
+
+.saveButton {
+  @media all and (max-width: 450px) {
+    display: none;
+  }
 }
 
 .inputSlider {
@@ -39,4 +50,8 @@
   position: absolute;
   left: 100%;
   width: 200px;
+
+  @media all and (max-width: 450px) {
+    width: 150px;
+  }
 }

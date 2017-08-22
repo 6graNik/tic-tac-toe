@@ -39,27 +39,27 @@ export default function Configurations(props) {
       </li>
       <li className={styles.item}>
         <div className={styles.input}>
-          <Button
-            label="Start Game"
-            onClick={handleStartGame}
-            disabled={gameStart}
-            primary
-            />
+            <Button
+              label="Start Game"
+              onClick={handleStartGame}
+              disabled={gameStart}
+              primary
+              />
             <Button
               label="Restart Game"
               onClick={handleRestartGame}
               disabled={!gameStart}
               secondary
               />
-          <Button
-            disabled={gameFinish}
-            label={savedGame ? "Continue Game" : "Save Game"}
-            onClick={savedGame ? handleRestoreGame : handleSaveGame}
-            />
-        </div>
-      </li>
-
-
+            <span className={styles.saveButton}>
+              <Button
+                disabled={gameFinish}
+                label={savedGame ? "Continue Game" : "Save Game"}
+                onClick={savedGame ? handleRestoreGame : handleSaveGame}
+                />
+            </span>
+          </div>
+        </li>
     </ul>
   );
 }
