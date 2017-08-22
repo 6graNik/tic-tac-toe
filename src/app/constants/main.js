@@ -7,6 +7,10 @@ export const ROLE_PLAYER_ONE = 'Player One';
 export const ROLE_PLAYER_TWO = 'Player Two';
 export const ROLE_PLAYER_PC = 'Computer';
 
+export const DEBOUNCE_DEFAULT = 500;
+export const DEBOUNCE_HARD = 800;
+export const DEBOUNCE_LITE = 800;
+
 export const defaultGameConfig = {
   cells: [],
   moves: 0,

@@ -6,9 +6,9 @@ import Configurations from '../configurations';
 import GameField from '../game-field';
 import GameSettings from '../game-settings';
 
-import computerStrategy, {checkWin} from './utils/computer-strategies.js';
-import getWinningAxel from './utils/get-winning-axels.js';
-import getCells from './utils/get-cells.js';
+import computerStrategy, {checkWin} from '../../utils/computer-strategies.js';
+import getWinningAxel from '../../utils/get-winning-axels.js';
+import getCells from '../../utils/get-cells.js';
 
 import {
   // rolse
@@ -22,6 +22,10 @@ import {
   defaultGameConfig,
   //
   LOCAL_STORAGE_KEY,
+  // debounces
+  DEBOUNCE_DEFAULT,
+  DEBOUNCE_HARD,
+  DEBOUNCE_LITE,
 } from '../../constants/main.js';
 
 import styles from './styles.css';
@@ -152,7 +156,7 @@ export default class NoughtsCrosses extends Component {
 
         this.handleToggleRefresh();
       });
-    }, 500);
+    }, DEBOUNCE_DEFAULT);
   }
 
 
@@ -192,7 +196,7 @@ export default class NoughtsCrosses extends Component {
         this.handleStartGame();
         this.handleToggleRefresh();
       })
-    }, 500)
+    }, DEBOUNCE_DEFAULT)
   }
 
   handleComputerMove = () => {
@@ -278,7 +282,7 @@ export default class NoughtsCrosses extends Component {
       activePlayer: nextActivePlayer,
     }, () => {
       if (this.state.activePlayer === ROLE_PLAYER_PC) {
-        setTimeout(() => this.handleComputerMove(), 800);
+        setTimeout(() => this.handleComputerMove(), DEBOUNCE_HARD);
       }
     });
   }
@@ -312,5 +316,5 @@ export default class NoughtsCrosses extends Component {
       userFieldSize: value,
       cells: getCells(value),
     });
-  }, 300)
+  }, DEBOUNCE_LITE)
 }
