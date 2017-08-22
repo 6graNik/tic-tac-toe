@@ -56,6 +56,7 @@ export default class NoughtsCrosses extends Component {
       showRefresh,
       winner,
       savedGame,
+      gameDisabled,
     } = this.state;
 
     return (
@@ -74,8 +75,11 @@ export default class NoughtsCrosses extends Component {
               handleRestartGame={this.handleRestartGame}
               handleRestoreGame={this.handleRestoreGame}
               handleSaveGame={this.handleSaveGame}
+              handleToggleGameDisabled={this.handleToggleGameDisabled}
               savedGame={savedGame}
               gameFinish={gameFinish}
+              gameDisabled={gameDisabled}
+              showRefresh={showRefresh}
             />
           </section>
           <section className={styles.gameContainer}>
@@ -115,7 +119,12 @@ export default class NoughtsCrosses extends Component {
       twoPlayerMode,
       defaultFieldSize,
       userFieldSize,
+      gameDisabled,
     } = this.state;
+
+    if (gameDisabled) {
+      return;
+    }
 
     this.handleToggleRefresh();
 
@@ -310,6 +319,12 @@ export default class NoughtsCrosses extends Component {
 
     window.localStorage.removeItem(LOCAL_STORAGE_KEY)
   }
+
+  handleToggleGameDisabled = debounce(() => {
+    this.setState({
+      gameDisabled: !this.state.gameDisabled,
+    });
+  }, DEBOUNCE_LITE, {leading: true, trailing: true})
 
   handleChangeFieldSize = debounce((event, value) => {
     this.setState({

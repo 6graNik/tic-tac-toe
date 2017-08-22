@@ -15,9 +15,12 @@ export default function GameConfig(props) {
     defaultFieldSize,
     userFieldSize,
     handleChangeFieldSize,
+    handleToggleGameDisabled,
     gameStart,
     gameFinish,
     savedGame,
+    gameDisabled,
+    showRefresh,
   } = props;
 
   return (
@@ -27,6 +30,8 @@ export default function GameConfig(props) {
           <span>Choose field size: {userFieldSize || defaultFieldSize}x{userFieldSize || defaultFieldSize}</span>
           <div className={cx(styles.input, styles.inputSlider)}>
             <Slider
+              onDragStart={handleToggleGameDisabled}
+              onDragStop={handleToggleGameDisabled}
               disabled={gameStart}
               onChange={handleChangeFieldSize}
               default={defaultFieldSize}
@@ -42,7 +47,7 @@ export default function GameConfig(props) {
             <Button
               label="Start Game"
               onClick={handleStartGame}
-              disabled={gameStart}
+              disabled={gameStart || gameDisabled || showRefresh}
               primary
               />
             <Button
@@ -53,7 +58,7 @@ export default function GameConfig(props) {
               />
             <span className={styles.saveButton}>
               <Button
-                disabled={gameFinish}
+                disabled={gameFinish || showRefresh}
                 label={savedGame ? "Continue Game" : "Save Game"}
                 onClick={savedGame ? handleRestoreGame : handleSaveGame}
                 />

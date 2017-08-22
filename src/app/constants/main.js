@@ -27,4 +27,5 @@ export const defaultGameConfig = {
   defaultFieldSize: 3,
   userFieldSize: null,
   showRefresh: false,
+  gameDisabled: false,
 };
