@@ -71,6 +71,7 @@ export default class NoughtsCrosses extends Component {
               handleRestoreGame={this.handleRestoreGame}
               handleSaveGame={this.handleSaveGame}
               savedGame={savedGame}
+              gameFinish={gameFinish}
             />
           </section>
           <section className={styles.gameContainer}>
@@ -301,9 +302,7 @@ export default class NoughtsCrosses extends Component {
   handleRestoreGame = () => {
     const gameState = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_KEY));
 
-    this.setState({
-      ...gameState,
-    });
+    this.setState({...gameState});
 
     window.localStorage.removeItem(LOCAL_STORAGE_KEY)
   }

@@ -16,6 +16,7 @@ export default function Configurations(props) {
     userFieldSize,
     handleChangeFieldSize,
     gameStart,
+    gameFinish,
     savedGame,
   } = props;
 
@@ -59,6 +60,7 @@ export default function Configurations(props) {
               secondary
               />
           <Button
+            disabled={gameFinish}
             label={savedGame ? "Continue Game" : "Save Game"}
             onClick={savedGame ? handleRestoreGame : handleSaveGame}
             />
