@@ -6,7 +6,7 @@ import cx from 'classnames';
 
 import styles from './styles.css';
 
-export default function Configurations(props) {
+export default function GameConfig(props) {
   const {
     handleStartGame,
     handleRestartGame,

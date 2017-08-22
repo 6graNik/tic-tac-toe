@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Button from 'material-ui/RaisedButton';
 import debounce from 'lodash/debounce';
 
-import Configurations from '../configurations';
+import GameConfig from '../game-config';
 import GameField from '../game-field';
 import GameSettings from '../game-settings';
 
@@ -65,7 +65,7 @@ export default class NoughtsCrosses extends Component {
             <h1>Noughts and Crosses game App</h1>
           </section>
           <section className={styles.configurations}>
-            <Configurations
+            <GameConfig
               handleStartGame={this.handleStartGame}
               gameStart={gameStart}
               defaultFieldSize={defaultFieldSize}
