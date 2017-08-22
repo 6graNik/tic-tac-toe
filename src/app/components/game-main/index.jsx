@@ -235,7 +235,7 @@ export default class NoughtsCrosses extends Component {
     }
 
     this.handleCellSetValue(index);
-    this.handleChangeMove();
+    setTimeout(() => this.handleChangeMove(), 0);
   }
 
   handleCellSetValue = (index) => {
