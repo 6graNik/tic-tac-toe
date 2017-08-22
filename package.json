@@ -4,7 +4,7 @@
   "description": "App for qipqap",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf ./build & webpack --optimize-minimize --config webpack.build.config.js",
+    "build": "rm -rf ./build & NODE_ENV=production webpack --config webpack.build.config.js",
     "start": "webpack-dev-server",
     "server": "node --no-deprecation ./src/server.js",
     "dev": "killall node & NODE_ENV=development npm run start & npm run server"
