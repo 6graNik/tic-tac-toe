@@ -10,10 +10,13 @@ export default function Configurations(props) {
   const {
     handleStartGame,
     handleRestartGame,
+    handleRestoreGame,
+    handleSaveGame,
     defaultFieldSize,
     userFieldSize,
     handleChangeFieldSize,
     gameStart,
+    savedGame,
   } = props;
 
   return (
@@ -56,7 +59,8 @@ export default function Configurations(props) {
               secondary
               />
           <Button
-            label="Continue Game"
+            label={savedGame ? "Continue Game" : "Save Game"}
+            onClick={savedGame ? handleRestoreGame : handleSaveGame}
             />
         </div>
       </li>

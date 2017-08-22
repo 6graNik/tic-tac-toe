@@ -18,7 +18,10 @@ import {
   // values
   VALUE_NOUGHT,
   VALUE_CROSS,
+  // config
   defaultGameConfig,
+  //
+  LOCAL_STORAGE_KEY,
 } from '../../constants/main.js';
 
 import styles from './styles.css';
@@ -31,6 +34,7 @@ export default class NoughtsCrosses extends Component {
   componentWillMount() {
     this.setState({
       cells: getCells(this.state.defaultFieldSize),
+      savedGame: Boolean(window.localStorage.getItem(LOCAL_STORAGE_KEY)),
     });
   }
 
@@ -46,7 +50,8 @@ export default class NoughtsCrosses extends Component {
       userFieldSize,
       cells,
       showRefresh,
-      winner
+      winner,
+      savedGame,
     } = this.state;
 
     return (
@@ -63,6 +68,9 @@ export default class NoughtsCrosses extends Component {
               userFieldSize={userFieldSize}
               handleChangeFieldSize={this.handleChangeFieldSize}
               handleRestartGame={this.handleRestartGame}
+              handleRestoreGame={this.handleRestoreGame}
+              handleSaveGame={this.handleSaveGame}
+              savedGame={savedGame}
             />
           </section>
           <section className={styles.gameContainer}>
@@ -83,7 +91,7 @@ export default class NoughtsCrosses extends Component {
               playerTwo={this.state[ROLE_PLAYER_TWO]}
               computer={this.state[ROLE_PLAYER_PC]}
               activePlayer={activePlayer}
-              moves={moves.length}
+              moves={moves}
             />
           </section>
         </main>
@@ -229,25 +237,17 @@ export default class NoughtsCrosses extends Component {
     const {
       cells,
       activePlayer,
+      moves,
     } = this.state;
-
-    const moves = this.state.moves.slice(0);
 
     // change clicked cell value
     cells[index].value = this.state[activePlayer];
-
-    this.state.moves.push({
-      ...this.state,
-      cells: [
-        ...cells,
-      ],
-    });
 
     this.setState({
       cells: [
         ...cells,
       ],
-      moves: [...this.state.moves],
+      moves: moves + 1,
     })
   }
 
@@ -267,7 +267,7 @@ export default class NoughtsCrosses extends Component {
       userFieldSize
     );
 
-    if (win || moves.length === cells.length) {
+    if (win || moves === cells.length) {
       return this.handleGameFinish(win);
     }
 
@@ -286,6 +286,26 @@ export default class NoughtsCrosses extends Component {
     this.setState({
       showRefresh: !this.state.showRefresh
     });
+  }
+
+  handleSaveGame = () => {
+    const gameState = JSON.stringify({...this.state});
+
+    window.localStorage.setItem(LOCAL_STORAGE_KEY, gameState);
+
+    this.setState({
+      savedGame: true,
+    });
+  }
+
+  handleRestoreGame = () => {
+    const gameState = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_KEY));
+
+    this.setState({
+      ...gameState,
+    });
+
+    window.localStorage.removeItem(LOCAL_STORAGE_KEY)
   }
 
   handleChangeFieldSize = debounce((event, value) => {

@@ -25,6 +25,7 @@ export default function GameField(props) {
   let y = 0;
   let bg = ['#f2f2f2', '#fff'];
   const evenSide = !(fieldSize % 2);
+  const showOverlay = showRefresh || !gameStart || gameFinish;
 
   return (
     <section className={styles.fieldWrapper}>
@@ -63,7 +64,7 @@ export default function GameField(props) {
       {showRefresh && <div className={styles.refreshIndicator}>
         <RefreshIndicator status="loading" style={{position: 'static'}}/>
       </div>}
-      {showRefresh || !gameStart || gameFinish && <div className={styles.overlay} />}
+      {showOverlay && <div className={styles.overlay} />}
       {gameFinish && <div className={styles.winner}>
         {winner ? `Wins: ${winner}!` : 'Draw'}
       </div>}

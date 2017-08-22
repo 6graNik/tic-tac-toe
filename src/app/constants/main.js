@@ -1,3 +1,5 @@
+export const LOCAL_STORAGE_KEY = 'tic-tac-toe-app';
+
 export const VALUE_NOUGHT = 'noight';
 export const VALUE_CROSS = 'cross';
 
@@ -7,7 +9,7 @@ export const ROLE_PLAYER_PC = 'Computer';
 
 export const defaultGameConfig = {
   cells: [],
-  moves: [],
+  moves: 0,
   gameStart: false,
   gameFinish: false,
   twoPlayerMode: false,
