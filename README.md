@@ -16,4 +16,6 @@ Memoizations - functions getCells and getWinningAxels implemeting neested for ci
 
 PropTypes - add type checking for React Component props.
 
+Tests - unit and snapshot tests.
+
 Multiplayer - add Firebase based multiplayer mode this separate "rooms".
