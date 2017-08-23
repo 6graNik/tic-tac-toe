@@ -11,3 +11,7 @@ To play it around in dev mode.
 
 For production build: npm i & npm run build 
 
+# Features TODO
+Memoizations - functions getCells and getWinningAxels implemeting neested for cicles, which freeze browsers activity
+PropTypes - add type checking for React Component props
+Multiplayer - add Firebase based multiplayer mode this separate "rooms"
