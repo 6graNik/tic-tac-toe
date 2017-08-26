@@ -20,9 +20,24 @@ export const defaultGameConfig = {
   activePlayer: null,
   warning: null,
   // here we will write which figure each one will have
-  [ROLE_PLAYER_ONE]: null,
-  [ROLE_PLAYER_TWO]: null,
-  [ROLE_PLAYER_PC]: null,
+  [ROLE_PLAYER_ONE]: {
+    value: null,
+    isOnline: false,
+    hash: null,
+    name: null,
+  },
+  [ROLE_PLAYER_TWO]: {
+    value: null,
+    isOnline: false,
+    hash: null,
+    name: null,
+  },
+  [ROLE_PLAYER_PC]: {
+    value: null,
+    isOnline: false,
+    hash: null,
+    name: null,
+  },
   //
   defaultFieldSize: 3,
   userFieldSize: null,

@@ -152,8 +152,14 @@ export default class NoughtsCrosses extends Component {
     setTimeout(() => {
       this.setState({
         gameStart: true,
-        [crossPlayerName]: VALUE_CROSS,
-        [noughtsPlayerName]: VALUE_NOUGHT,
+        [crossPlayerName]: {
+          ...this.state[crossPlayerName],
+          value: VALUE_CROSS
+        },
+        [noughtsPlayerName]: {
+          ...this.state[noughtsPlayerName],
+          value: VALUE_NOUGHT
+        },
         activePlayer: crossPlayerName,
         players,
         warning: null,
@@ -173,13 +179,13 @@ export default class NoughtsCrosses extends Component {
     let winner;
 
     switch (value) {
-      case this.state[ROLE_PLAYER_ONE]:
+      case this.state[ROLE_PLAYER_ONE].value:
         winner = ROLE_PLAYER_ONE;
         break;
-      case this.state[ROLE_PLAYER_TWO]:
+      case this.state[ROLE_PLAYER_TWO].value:
         winner = ROLE_PLAYER_TWO;
         break;
-      case this.state[ROLE_PLAYER_PC]:
+      case this.state[ROLE_PLAYER_PC].value:
         winner = ROLE_PLAYER_PC;
         break;
       default:
@@ -216,8 +222,8 @@ export default class NoughtsCrosses extends Component {
 
     const index = computerStrategy(
       cells,
-      this.state[ROLE_PLAYER_PC],
-      this.state[ROLE_PLAYER_ONE],
+      this.state[ROLE_PLAYER_PC].value,
+      this.state[ROLE_PLAYER_ONE].value,
       userFieldSize
     );
 
@@ -255,7 +261,7 @@ export default class NoughtsCrosses extends Component {
     } = this.state;
 
     // change clicked cell value
-    cells[index].value = this.state[activePlayer];
+    cells[index].value = this.state[activePlayer].value;
 
     this.setState({
       cells: [
@@ -276,8 +282,8 @@ export default class NoughtsCrosses extends Component {
 
     const win = checkWin(
       cells,
-      this.state[ROLE_PLAYER_ONE],
-      this.state[ROLE_PLAYER_PC] || this.state[ROLE_PLAYER_TWO],
+      this.state[ROLE_PLAYER_ONE].value,
+      this.state[ROLE_PLAYER_PC].value || this.state[ROLE_PLAYER_TWO].value,
       userFieldSize
     );
 
