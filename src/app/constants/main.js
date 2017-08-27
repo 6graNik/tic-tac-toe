@@ -14,7 +14,7 @@ export const DEBOUNCE_LITE = 800;
 export const USER_HASH_LENGTH = 5;
 export const GAME_HASH_LENGTH = 10;
 
-export const defaultGameConfig = {
+export const DEFAULT_GAME_CONFIG = {
   cells: [],
   moves: 0,
   gameStart: false,

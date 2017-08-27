@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Button from 'material-ui/RaisedButton';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import firebase from 'firebase';
@@ -8,8 +7,15 @@ import GameConfig from '../game-config';
 import GameField from '../game-field';
 import GameSettings from '../game-settings';
 
-import computerStrategy, {checkWin} from '../../utils/computer-strategies.js';
-import getWinningAxel from '../../utils/get-winning-axels.js';
+import startGame from '../../actions/start-game.js';
+import finishGame from '../../actions/finish-game.js';
+import restartGame from '../../actions/restart-game.js';
+import cellClick from '../../actions/cell-click.js';
+import cellSetValue from '../../actions/cell-set-value.js';
+import changeMove from '../../actions/change-move.js';
+import enableMultiplayer from '../../actions/enable-multiplayer.js';
+
+import computerStrategy from '../../utils/computer-strategies.js';
 import getCells from '../../utils/get-cells.js';
 import getUniqId from '../../utils/get-uniq-id.js';
 
@@ -18,18 +24,12 @@ import {
   ROLE_PLAYER_ONE,
   ROLE_PLAYER_TWO,
   ROLE_PLAYER_PC,
-  // values
-  VALUE_NOUGHT,
-  VALUE_CROSS,
   // config
-  defaultGameConfig,
+  DEFAULT_GAME_CONFIG,
   // debounces
-  DEBOUNCE_DEFAULT,
-  DEBOUNCE_HARD,
   DEBOUNCE_LITE,
   //
   LOCAL_STORAGE_KEY,
-  FIREBASE_CONFIG,
   USER_HASH_LENGTH,
   GAME_HASH_LENGTH,
 } from '../../constants/main.js';
@@ -40,7 +40,7 @@ const HASH_ID = getUniqId(USER_HASH_LENGTH);
 
 export default class NoughtsCrosses extends Component {
   state = {
-    ...defaultGameConfig,
+    ...DEFAULT_GAME_CONFIG,
   }
 
   componentWillMount() {
@@ -137,111 +137,15 @@ export default class NoughtsCrosses extends Component {
   }
 
   handleStartGame = () => {
-    const {
-      twoPlayerMode,
-      defaultFieldSize,
-      userFieldSize,
-      gameDisabled,
-    } = this.state;
-
-    if (gameDisabled) {
-      return;
-    }
-
-    this.handleToggleRefresh();
-
-    let players = [];
-
-    if (twoPlayerMode) {
-      players = [
-        ROLE_PLAYER_ONE,
-        ROLE_PLAYER_TWO,
-      ];
-    } else {
-      players = [
-        ROLE_PLAYER_ONE,
-        ROLE_PLAYER_PC,
-      ];
-    }
-
-    const randomIndex = Math.floor(Math.random() * 2);
-
-    // the one who's index win will be playing with cross and begining the game
-    const crossPlayerName = players[randomIndex];
-    // the second one will be playing noughts
-    const noughtsPlayerName = players.find((player) => player !== crossPlayerName);
-
-    setTimeout(() => {
-      this.handleSetState({
-        gameStart: true,
-        [crossPlayerName]: {
-          ...this.state[crossPlayerName],
-          value: VALUE_CROSS
-        },
-        [noughtsPlayerName]: {
-          ...this.state[noughtsPlayerName],
-          value: VALUE_NOUGHT
-        },
-        activePlayer: crossPlayerName,
-        players,
-        warning: null,
-        userFieldSize: userFieldSize || defaultFieldSize
-      }, () => {
-        if (this.state.activePlayer === ROLE_PLAYER_PC) {
-          this.handleComputerMove();
-        }
-
-        this.handleToggleRefresh();
-      });
-    }, DEBOUNCE_DEFAULT);
+    startGame(this);
   }
 
   handleGameFinish = ({value}) => {
-    let winner;
-
-    switch (value) {
-      case this.state[ROLE_PLAYER_ONE].value:
-        winner = ROLE_PLAYER_ONE;
-        break;
-      case this.state[ROLE_PLAYER_TWO].value:
-        winner = ROLE_PLAYER_TWO;
-        break;
-      case this.state[ROLE_PLAYER_PC].value:
-        winner = ROLE_PLAYER_PC;
-        break;
-      default:
-
-    }
-
-    this.handleSetState({
-      gameStart: true,
-      gameFinish: true,
-      winner,
-    });
+    finishGame(this, value);
   }
 
   handleRestartGame = () => {
-    this.handleToggleRefresh();
-
-    setTimeout(() => {
-      this.handleSetState({
-        ...defaultGameConfig,
-        [ROLE_PLAYER_ONE]: {
-          ...this.state[ROLE_PLAYER_ONE],
-          value: null,
-        },
-        [ROLE_PLAYER_TWO]: {
-          ...this.state[ROLE_PLAYER_TWO],
-          value: null,
-        },
-        twoPlayerMode: this.state.twoPlayerMode,
-        userFieldSize: this.state.userFieldSize,
-        cells: getCells(this.state.userFieldSize),
-      }, () => {
-        this.handleStartGame();
-        this.handleToggleRefresh();
-      })
-    }, DEBOUNCE_DEFAULT)
+    restartGame(this);
   }
 
   handleComputerMove = () => {
@@ -262,79 +166,15 @@ export default class NoughtsCrosses extends Component {
   }
 
   handleCellClick = (index) => {
-    const {
-      cells,
-      gameStart,
-      gameFinish,
-      activePlayer,
-      twoPlayerMode,
-    } = this.state;
-
-    // user cant interact with board before game started
-    if (!gameStart || gameFinish) {
-      return this.handleWarnUsers();
-    }
-
-    // user cant interact this sell that already have value
-    if (
-      cells[index].value ||
-      !twoPlayerMode && activePlayer !== ROLE_PLAYER_ONE ||
-      twoPlayerMode && this.state[activePlayer].hash !== HASH_ID
-    ) {
-      return;
-    }
-
-    this.handleCellSetValue(index);
-    setTimeout(() => this.handleChangeMove(), 0);
+    cellClick(this, index, HASH_ID);
   }
 
   handleCellSetValue = (index) => {
-    const {
-      cells,
-      activePlayer,
-      moves,
-    } = this.state;
-
-    // change clicked cell value
-    cells[index].value = this.state[activePlayer].value;
-
-    this.handleSetState({
-      cells: [
-        ...cells,
-      ],
-      moves: moves + 1,
-    })
+    cellSetValue(this, index);
   }
 
   handleChangeMove = () => {
-    const {
-      players,
-      activePlayer,
-      cells,
-      userFieldSize,
-      moves,
-    } = this.state;
-
-    const win = checkWin(
-      cells,
-      this.state[ROLE_PLAYER_ONE].value,
-      this.state[ROLE_PLAYER_PC].value || this.state[ROLE_PLAYER_TWO].value,
-      userFieldSize
-    );
-
-    if (win || moves === cells.length) {
-      return this.handleGameFinish(win);
-    }
-
-    const nextActivePlayer = players.find((player) => player !== activePlayer);
-
-    this.handleSetState({
-      activePlayer: nextActivePlayer,
-    }, () => {
-      if (this.state.activePlayer === ROLE_PLAYER_PC) {
-        setTimeout(() => this.handleComputerMove(), DEBOUNCE_HARD);
-      }
-    });
+    changeMove(this);
   }
 
   handleToggleRefresh = () => {
@@ -361,58 +201,12 @@ export default class NoughtsCrosses extends Component {
     window.localStorage.removeItem(LOCAL_STORAGE_KEY)
   }
 
-  handleEnableMultiplayer = (event, state, connect) => {
+  handleEnableMultiplayer = (event, state, connect = false) => {
     if (!state) {
       return;
     }
 
-    // if both players have hash, that's mean they connected, third one Cantplay, sorry
-    if (this.state[ROLE_PLAYER_ONE].hash && this.state[ROLE_PLAYER_TWO].hash) {
-      return;
-    }
-
-    const currentPlayer = connect ? ({
-      ...this.state[ROLE_PLAYER_ONE],
-      hash: HASH_ID,
-      inOnline: true,
-    }) : ({
-      ...this.state[ROLE_PLAYER_TWO],
-      hash: HASH_ID,
-      inOnline: true,
-    });
-
-    // initializing firabase and database
-    firebase.initializeApp(FIREBASE_CONFIG);
-    this.database = firebase.database();
-    this.gameId = this.gameId && this.gameId.length === GAME_HASH_LENGTH ?
-      this.gameId : getUniqId(GAME_HASH_LENGTH);
-
-    this.setState({
-      twoPlayerMode: true,
-      gameId: this.gameId,
-    }, () => {
-
-      if (connect) {
-        this.database.ref(`${this.gameId}/uniqLink`).set(false);
-        this.database.ref(`${this.gameId}/${ROLE_PLAYER_TWO}`).set({
-          ...currentPlayer
-        });
-      } else {
-        this.database.ref(this.gameId).set({
-          ...this.state,
-          uniqLink: `${window.location.href}${this.gameId}`,
-          [ROLE_PLAYER_ONE] : {
-            ...currentPlayer,
-          }
-        });
-      }
-
-      this.database.ref(this.gameId).on(
-        'value',
-        (snapshot) => this.handleUpdateState(snapshot)
-      );
-    });
-
+    enableMultiplayer(this, event, state, connect, HASH_ID);
   }
 
   handleUpdateState = (data) => {
