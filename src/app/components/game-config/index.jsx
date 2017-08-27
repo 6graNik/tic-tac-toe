@@ -16,11 +16,14 @@ export default function GameConfig(props) {
     userFieldSize,
     handleChangeFieldSize,
     handleToggleGameDisabled,
+    handleEnableMultiplayer,
     gameStart,
     gameFinish,
     savedGame,
     gameDisabled,
     showRefresh,
+    twoPlayerMode,
+    uniqLink,
   } = props;
 
   return (
@@ -42,6 +45,23 @@ export default function GameConfig(props) {
           </div>
         </h2>
       </li>
+      <li className={styles.item}>
+        <h2 className={styles.header}>
+          <span>Enable multiplayer:</span>
+          <div className={styles.input}>
+            <Toggle
+              onToggle={handleEnableMultiplayer}
+              defaultToggled={twoPlayerMode}
+              />
+          </div>
+        </h2>
+      </li>
+      { !!twoPlayerMode && !!uniqLink && <li className={styles.item}>
+        <h2 className={styles.header}>
+          <span>Send your friend link to connect the game:</span>
+          <span className={styles.link}>{uniqLink}</span>
+        </h2>
+      </li> }
       <li className={styles.item}>
         <div className={styles.input}>
             <Button

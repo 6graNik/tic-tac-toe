@@ -11,6 +11,9 @@ export const DEBOUNCE_DEFAULT = 500;
 export const DEBOUNCE_HARD = 800;
 export const DEBOUNCE_LITE = 800;
 
+export const USER_HASH_LENGTH = 5;
+export const GAME_HASH_LENGTH = 10;
+
 export const defaultGameConfig = {
   cells: [],
   moves: 0,
@@ -43,4 +46,10 @@ export const defaultGameConfig = {
   userFieldSize: null,
   showRefresh: false,
   gameDisabled: false,
+};
+
+export const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDpUD5vSIZxCaVTGG1uBYNuvECmwDfzToE",
+  authDomain: "tic-tac-toe-56c5a.firebaseapp.com",
+  databaseURL: "https://tic-tac-toe-56c5a.firebaseio.com",
 };
