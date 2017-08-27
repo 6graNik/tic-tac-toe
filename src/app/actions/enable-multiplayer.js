@@ -18,7 +18,7 @@ export default function enableMultiplayer(context, event, state, connect, hash) 
     return;
   }
 
-  const currentPlayer = connect ? ({
+  const currentPlayer = !connect ? ({
     ...context.state[ROLE_PLAYER_ONE],
     hash,
     inOnline: true,
@@ -27,6 +27,8 @@ export default function enableMultiplayer(context, event, state, connect, hash) 
     hash,
     inOnline: true,
   });
+
+  debugger;
 
   // initializing firabase and database
   firebase.initializeApp(FIREBASE_CONFIG);
@@ -42,6 +44,7 @@ export default function enableMultiplayer(context, event, state, connect, hash) 
     if (connect) {
       // update player two info in db and clear link
       context.database.ref(`${context.gameId}/uniqLink`).set(false);
+      context.database.ref(`${context.gameId}/connected`).set(true);
       context.database.ref(`${context.gameId}/${ROLE_PLAYER_TWO}`).set({
         ...currentPlayer
       });

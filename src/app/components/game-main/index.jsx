@@ -10,6 +10,7 @@ import GameSettings from '../game-settings';
 import startGame from '../../actions/start-game.js';
 import finishGame from '../../actions/finish-game.js';
 import restartGame from '../../actions/restart-game.js';
+import resetGame from '../../actions/reset-game.js';
 import cellClick from '../../actions/cell-click.js';
 import cellSetValue from '../../actions/cell-set-value.js';
 import changeMove from '../../actions/change-move.js';
@@ -60,6 +61,22 @@ export default class NoughtsCrosses extends Component {
     });
   }
 
+  getCurrentPlayer() {
+    if (!this.state.twoPlayerMode) {
+      return this.state[ROLE_PLAYER_ONE];
+    }
+
+    switch (HASH_ID) {
+      case this.state[ROLE_PLAYER_ONE].hash: {
+        return this.state[ROLE_PLAYER_ONE]
+      }
+
+      case this.state[ROLE_PLAYER_TWO].hash: {
+        return this.state[ROLE_PLAYER_TWO]
+      }
+    }
+  }
+
   render() {
     const {
       warning,
@@ -76,7 +93,10 @@ export default class NoughtsCrosses extends Component {
       savedGame,
       gameDisabled,
       uniqLink,
+      connected,
     } = this.state;
+
+    const currentPlayer = this.getCurrentPlayer();
 
     return (
       <section className={styles.root}>
@@ -92,16 +112,20 @@ export default class NoughtsCrosses extends Component {
               userFieldSize={userFieldSize}
               handleChangeFieldSize={this.handleChangeFieldSize}
               handleRestartGame={this.handleRestartGame}
+              handleResetGame={this.handleResetGame}
               handleRestoreGame={this.handleRestoreGame}
               handleSaveGame={this.handleSaveGame}
               handleToggleGameDisabled={this.handleToggleGameDisabled}
               handleEnableMultiplayer={this.handleEnableMultiplayer}
+              handleNameChange={this.handleNameChange}
               savedGame={savedGame}
               gameFinish={gameFinish}
               gameDisabled={gameDisabled}
               showRefresh={showRefresh}
               uniqLink={uniqLink}
               twoPlayerMode={twoPlayerMode}
+              connected={connected}
+              currentPlayer={currentPlayer}
             />
           </section>
           <section className={styles.gameContainer}>
@@ -118,10 +142,10 @@ export default class NoughtsCrosses extends Component {
             <GameSettings
               gameStart={gameStart}
               twoPlayerMode={twoPlayerMode}
-              playerOne={this.state[ROLE_PLAYER_ONE].value}
-              playerTwo={this.state[ROLE_PLAYER_TWO].value}
-              computer={this.state[ROLE_PLAYER_PC].value}
-              activePlayer={activePlayer}
+              playerOne={this.state[ROLE_PLAYER_ONE]}
+              playerTwo={this.state[ROLE_PLAYER_TWO]}
+              computer={this.state[ROLE_PLAYER_PC]}
+              activePlayer={this.state[activePlayer]}
               moves={moves}
             />
           </section>
@@ -146,6 +170,10 @@ export default class NoughtsCrosses extends Component {
 
   handleRestartGame = () => {
     restartGame(this);
+  }
+
+  handleResetGame = () => {
+    resetGame(this);
   }
 
   handleComputerMove = () => {
@@ -207,6 +235,17 @@ export default class NoughtsCrosses extends Component {
     }
 
     enableMultiplayer(this, event, state, connect, HASH_ID);
+  }
+
+  handleNameChange = (event, value) => {
+    const currentPlayer = this.getCurrentPlayer();
+
+    this.handleSetState({
+      [currentPlayer.baseName]: {
+        ...currentPlayer,
+        name: value,
+      }
+    });
   }
 
   handleUpdateState = (data) => {

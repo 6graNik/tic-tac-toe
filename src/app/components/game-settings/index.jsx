@@ -23,20 +23,20 @@ export default function GameSettings(props) {
   return (
     <section className={styles.gameSettings}>
       <div className={cx(styles.figuresConfig, {[styles.unactive]: !gameStart})}>
-        {gameStart && <div className={styles.bold}>Current Move: {activePlayer};</div>}
+        {gameStart && <div className={styles.bold}>Current Move: {activePlayer.name};</div>}
         <div>
-          Player One:
-          <Figure value={playerOne}/>
+          {playerOne.name}:
+          <Figure value={playerOne.value}/>
         </div>
         {twoPlayerMode ? (
           <div>
-            Player Two:
-            <Figure value={playerTwo}/>
+            {playerTwo.name}
+            <Figure value={playerTwo.value}/>
           </div>
         ) : (
           <div>
             Computer:
-            <Figure value={computer}/>
+            <Figure value={computer.value}/>
           </div>
         )}
         <div>Total moves: {moves}</div>
