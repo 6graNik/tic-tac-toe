@@ -46,7 +46,7 @@ export default class NoughtsCrosses extends Component {
 
   componentWillMount() {
     const url = window.location.href;
-    this.gameId = url.substr(url.lastIndexOf('/') + 1, url.length);
+    this.gameId = url.substr(url.lastIndexOf('?') + 1, url.length);
 
     if (this.gameId && this.gameId.length === GAME_HASH_LENGTH) {
       this.handleEnableMultiplayer(null, true, true);
