@@ -28,8 +28,6 @@ export default function enableMultiplayer(context, event, state, connect, hash) 
     inOnline: true,
   });
 
-  debugger;
-
   // initializing firabase and database
   firebase.initializeApp(FIREBASE_CONFIG);
   context.database = firebase.database();
@@ -51,7 +49,7 @@ export default function enableMultiplayer(context, event, state, connect, hash) 
     } else {
       context.database.ref(context.gameId).set({
         ...context.state,
-        uniqLink: `${window.location.href}${context.gameId}`,
+        uniqLink: `${window.location.href}?${context.gameId}`,
         [ROLE_PLAYER_ONE] : {
           ...currentPlayer,
         }
