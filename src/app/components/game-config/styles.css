@@ -38,6 +38,11 @@
   }
 }
 
+.inputName {
+  max-width: 100px;
+  overflow: hidden;
+}
+
 .saveButton {
   @media all and (max-width: 450px) {
     display: none;
@@ -54,4 +59,27 @@
   @media all and (max-width: 450px) {
     width: 150px;
   }
+}
+
+.link {
+  display: inline-block;
+  background: #f2f2f2;
+  padding: 4px 10px;
+}
+
+.connectStatus {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #ccc;
+  border-radius: 50%;
+  vertical-align: 8px;
+}
+
+.connectStatusInProgress {
+  background: #FFEB3B;
+}
+
+.connectStatusOk {
+  background: #4CAF50;
 }
