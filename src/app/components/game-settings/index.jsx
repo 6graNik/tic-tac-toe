@@ -25,12 +25,12 @@ export default function GameSettings(props) {
       <div className={cx(styles.figuresConfig, {[styles.unactive]: !gameStart})}>
         {gameStart && <div className={styles.bold}>Current Move: {activePlayer.name};</div>}
         <div>
-          {playerOne.name}:
+          {playerOne.name || playerOne.baseName}:
           <Figure value={playerOne.value}/>
         </div>
         {twoPlayerMode ? (
           <div>
-            {playerTwo.name}
+            {playerTwo.name || playerTwo.baseName}
             <Figure value={playerTwo.value}/>
           </div>
         ) : (

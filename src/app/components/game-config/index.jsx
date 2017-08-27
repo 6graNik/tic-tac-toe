@@ -83,6 +83,7 @@ export default function GameConfig(props) {
       { !!twoPlayerMode && !!uniqLink && <li className={styles.item}>
         <h2 className={styles.header}>
           <span>Send your friend link to connect the game:</span>
+          <br />
           <span className={styles.link}>{uniqLink}</span>
         </h2>
       </li> }

@@ -10,6 +10,10 @@ import getCells from '../utils/get-cells.js';
 export default function resetGame(context) {
   context.handleToggleRefresh();
 
+  if (context.database) {
+    context.database.ref(context.gameId).off('value');
+  }
+
   setTimeout(() => {
     context.handleSetState({
       ...DEFAULT_GAME_CONFIG,
